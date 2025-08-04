@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+python-multipart
+python-decouple
+fastapi[all]
+google-generativeai
+Pillow
+gunicorn
+psycopg2-binary

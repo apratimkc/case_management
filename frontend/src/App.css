@@ -1,0 +1,13 @@
+.App {
+  padding: 20px;
+}
+
+.existing-cases {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+  }
+}
