@@ -17,7 +17,7 @@ from database import SessionLocal, engine
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) 
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
@@ -55,16 +55,16 @@ def get_db():
 
 # --- API Endpoints ---
 
-@app.post("/cases/", response_model=schemas.Case)
+@app.post("/api/cases/", response_model=schemas.Case)
 def create_case(case: schemas.CaseCreate, db: Session = Depends(get_db)):
     return crud.create_case(db=db, case=case)
 
-@app.get("/cases/", response_model=list[schemas.Case])
+@app.get("/api/cases/", response_model=list[schemas.Case])
 def read_cases(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     cases = crud.get_cases(db, skip=skip, limit=limit)
     return cases
 
-@app.post("/extract-case-no/")
+@app.post("/api/extract-case-no/")
 def extract_case_no(text_in: schemas.TextIn):
     logger.info(f"Received text for extraction: {text_in.text[:100]}...")
     try:
@@ -124,14 +124,14 @@ Text:
         logger.error(f"An error occurred during Google AI API call or JSON parsing: {e}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
 
-@app.put("/cases/{case_id}/complete", response_model=schemas.Case)
+@app.put("/api/cases/{case_id}/complete", response_model=schemas.Case)
 def mark_case_complete(case_id: int, db: Session = Depends(get_db)):
     db_case = crud.mark_case_as_complete(db, case_id=case_id)
     if db_case is None:
         raise HTTPException(status_code=404, detail="Case not found")
     return db_case
 
-@app.post("/extract-case-no-from-image/")
+@app.post("/api/extract-case-no-from-image/")
 async def extract_case_no_from_image(file: UploadFile = File(...)):
     logger.info(f"Received image for extraction: {file.filename}")
     try:
