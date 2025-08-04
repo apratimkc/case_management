@@ -17,7 +17,7 @@ function App() {
 
   const fetchCases = async () => {
     try {
-      const response = await axios.get('/cases/');
+      const response = await axios.get('/api/cases/');
       setCases(response.data);
     } catch (error) {
       console.error('Error fetching cases:', error);
@@ -39,7 +39,7 @@ function App() {
 
   const handleExtract = async () => {
     try {
-      const response = await axios.post('/extract-case-no/', { text: message });
+      const response = await axios.post('/api/extract-case-no/', { text: message });
       let extractedCases = response.data.cases;
       let lastSource = null;
       extractedCases.forEach(c => {
@@ -65,7 +65,7 @@ function App() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await axios.post('/extract-case-no-from-image/', formData, {
+      const response = await axios.post('/api/extract-case-no-from-image/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -93,7 +93,7 @@ function App() {
 
   const handleSaveCase = async (draftCase) => {
     try {
-      await axios.post('/cases/', { ...draftCase, category });
+      await axios.post('/api/cases/', { ...draftCase, category });
       setDraftCases(draftCases.filter(c => c.case_no !== draftCase.case_no));
       fetchCases();
     } catch (error) {
@@ -104,7 +104,7 @@ function App() {
   const handleSaveAll = async () => {
     try {
       for (const draft of draftCases) {
-        await axios.post('/cases/', { ...draft, category });
+        await axios.post('/api/cases/', { ...draft, category });
       }
       setDraftCases([]);
       fetchCases();
@@ -115,7 +115,7 @@ function App() {
 
   const markComplete = async (caseId) => {
     try {
-      await axios.put(`/cases/${caseId}/complete`);
+      await axios.put(`/api/cases/${caseId}/complete`);
       fetchCases();
     } catch (error) {
       console.error('Error marking case as complete:', error);
